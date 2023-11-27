@@ -6,7 +6,7 @@ const client = new Client({
   ],
 });
 
-
+console.log('dsadsaddasdsa)
 /*client.on('ready', () => {
   console.log(`Бот запущен как ${client.user.tag}`);
 
