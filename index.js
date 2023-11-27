@@ -62,11 +62,11 @@ function scheduleTask(hour, minute, callback) {
 }
 
 // Пример использования:
-scheduleTask(1, 11, () => {
+scheduleTask(1, 49, () => {
   doSomething()
 });
 
-scheduleTask(1, 12, () => {
+scheduleTask(1, 50, () => {
   doSomething()
 });
 
