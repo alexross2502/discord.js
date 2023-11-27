@@ -1,20 +1,43 @@
-const express = require("express");
+const express = require('express');
+const { Client, GatewayIntentBits } = require('discord.js');
+
 const app = express();
-import bot from "./bot.js"
 
-
-
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "working" });
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+  ],
 });
-const start = async () => {
-  try {
-    app.listen(8080, () => console.log("start", 8080));
-    bot()
-  } catch (e) {
-    console.log(e);
-  }
-};
 
-start();
+function doSomething() {
+  // ... ваша функция
+}
+
+function scheduleTask(hour, minute, callback) {
+  // ... ваша функция
+}
+
+app.all('/', (req, res) => {
+  // Этот обработчик позволяет боту обрабатывать HTTP-запросы от Vercel
+  res.send('Bot is running!');
+  doSomething();
+});
+
+// Пример использования:
+scheduleTask(3, 20, () => {
+  doSomething();
+});
+
+scheduleTask(3, 21, () => {
+  doSomething();
+});
+
+client.login(process.env.BOT_TOKEN);
+
+// Запускаем веб-сервер Express на порту, который предоставляет Vercel
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
