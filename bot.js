@@ -4,9 +4,7 @@ const client = new Client({
 });
 
 async function bot() {
-  console.log(process.env.BOT_TOKEN);
   await client.login(process.env.BOT_TOKEN);
-
   async function doSomething() {
     const serverID = "1177938443725176942";
     const server = await client.guilds.cache.get(serverID);
