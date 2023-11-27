@@ -5,18 +5,19 @@ const client = new Client({
 
 async function check(req, res) {
   try {
-    function doSomething() {
+    await client.login(process.env.BOT_TOKEN);
+    async function doSomething() {
       const serverID = "1177898865773531156";
-      const server = client.guilds.cache.get(serverID);
+      const server = await client.guilds.cache.get(serverID);
       if (server) {
         server.channels
           .fetch()
-          .then((channels) => {
-            const targetChannel = channels.find(
+          .then(async (channels) => {
+            const targetChannel = await channels.find(
               (channel) => channel.name === "test"
             );
             if (targetChannel) {
-              targetChannel.send(
+              await targetChannel.send(
                 "Привет! Я бот и я только что присоединился к серверу!"
               );
             } else {
@@ -41,9 +42,7 @@ async function check(req, res) {
     scheduleTask(3, 21, () => {
       doSomething();
     });
-    client.login(
-      "MTE3NzkwMTY5MzYxNTIxNDcxMw.GsUuyF.QF4ASzMl7q74iSui-nGheSEPqNpAVKtF9wxm_8"
-    );
+
     res.status(200).json("ok").end();
   } catch (e) {
     res.status(401).json({ message: e.message }).end();
