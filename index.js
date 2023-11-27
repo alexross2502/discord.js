@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3306;
 const cors = require("cors");
+const bot = require("./bot.js");
 
 const mongoose = require("mongoose");
 const router = require("./routes");
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 const start = async () => {
   try {
     app.listen(PORT, () => console.log("start", PORT));
+    bot();
   } catch (e) {
     console.log(e);
   }
