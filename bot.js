@@ -14,7 +14,7 @@ export default async function bot(){
     server.channels.fetch().then(channels => {
       // Выберите канал, в который бот будет отправлять сообщение
       const targetChannel = channels.find(channel => channel.name === 'test');
-
+        
       // Если канал найден, отправьте сообщение
       if (targetChannel) {
         targetChannel.send('Привет! Я бот и я только что присоединился к серверу!');
@@ -53,11 +53,11 @@ function scheduleTask(hour, minute, callback) {
 }
 
 // Пример использования:
-scheduleTask(1, 11, () => {
+scheduleTask(3, 20, () => {
   doSomething()
 });
 
-scheduleTask(1, 12, () => {
+scheduleTask(3, 21, () => {
   doSomething()
 });
 
