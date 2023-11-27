@@ -1,8 +1,4 @@
-const express = require('express');
 const { Client, GatewayIntentBits } = require('discord.js');
-
-const app = express();
-
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -11,18 +7,27 @@ const client = new Client({
 });
 
 function doSomething() {
-  // ... ваша функция
+  const serverID = process.env.SERVER_ID;
+  const server = client.guilds.cache.get(serverID);
+  if (server) {
+    server.channels.fetch().then(channels => {
+      const targetChannel = channels.find(channel => channel.name === 'test');
+      if (targetChannel) {
+        targetChannel.send('Привет! Я бот и я только что присоединился к серверу!');
+      } else {
+        console.error('Не удалось найти текстовый канал.');
+      }
+    }).catch(error => {
+      console.error('Ошибка при получении каналов сервера:', error);
+    });
+  } else {
+    console.error(`Сервер с ID ${serverID} не найден.`);
+  }
 }
 
 function scheduleTask(hour, minute, callback) {
   // ... ваша функция
 }
-
-app.all('/', (req, res) => {
-  // Этот обработчик позволяет боту обрабатывать HTTP-запросы от Vercel
-  res.send('Bot is running!');
-  doSomething();
-});
 
 // Пример использования:
 scheduleTask(3, 20, () => {
@@ -34,10 +39,3 @@ scheduleTask(3, 21, () => {
 });
 
 client.login(process.env.BOT_TOKEN);
-
-// Запускаем веб-сервер Express на порту, который предоставляет Vercel
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
