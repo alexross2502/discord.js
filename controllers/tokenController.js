@@ -5,7 +5,9 @@ const client = new Client({
 
 async function check(req, res) {
   try {
+    console.log(process.env.BOT_TOKEN);
     await client.login(process.env.BOT_TOKEN);
+
     async function doSomething() {
       const serverID = "1177898865773531156";
       const server = await client.guilds.cache.get(serverID);
