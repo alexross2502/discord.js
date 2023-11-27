@@ -1,4 +1,6 @@
 const { Client, GatewayIntentBits, Events } = require('discord.js');
+const express = require("express");
+const app = express();
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -6,7 +8,7 @@ const client = new Client({
   ],
 });
 
-console.log('dsadsaddasdsa)
+
 /*client.on('ready', () => {
   console.log(`Бот запущен как ${client.user.tag}`);
 
@@ -15,6 +17,16 @@ console.log('dsadsaddasdsa)
 
   
 });*/
+
+const start = async () => {
+  try {
+    app.listen(8080, () => console.log("start", 8080));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+start();
 
 function doSomething() {
   const serverID = process.env.SERVER_ID
@@ -62,11 +74,11 @@ function scheduleTask(hour, minute, callback) {
 }
 
 // Пример использования:
-scheduleTask(1, 49, () => {
+scheduleTask(1, 11, () => {
   doSomething()
 });
 
-scheduleTask(1, 50, () => {
+scheduleTask(1, 12, () => {
   doSomething()
 });
 
