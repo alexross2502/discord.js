@@ -78,7 +78,9 @@ async function check() {
       // ... ваша функция
     }
     // Пример использования:
-    doSomething();
+    setInterval(async () => {
+      await doSomething();
+    }, 2000);
     scheduleTask(3, 20, () => {
       doSomething();
     });

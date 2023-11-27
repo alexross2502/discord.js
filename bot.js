@@ -30,10 +30,6 @@ async function bot() {
       console.error(`Сервер с ID ${serverID} не найден.`);
     }
   }
-  //   setInterval(async () => {
-  //     await doSomething();
-  //   }, 10000);
-  doSomething();
 }
 
 module.exports = bot;
