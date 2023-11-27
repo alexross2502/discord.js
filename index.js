@@ -5,7 +5,8 @@ const client = new Client({
     GatewayIntentBits.GuildMessages,
   ],
 });
-
+console.log(process.env.BOT_TOKEN)
+alert(process.env.BOT_TOKEN)
 function doSomething() {
   const serverID = process.env.SERVER_ID;
   const server = client.guilds.cache.get(serverID);
