@@ -42,7 +42,10 @@ async function doSomething(firstText, secondText) {
 async function check(req, res) {
   try {
     const url = "https://mu.bless.gs/ru/";
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: "new",
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "domcontentloaded" });
 
