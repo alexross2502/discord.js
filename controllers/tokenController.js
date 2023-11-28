@@ -44,7 +44,7 @@ async function doSomething(firstText, secondText) {
 async function check(req, res) {
   try {
     const url = "https://mu.bless.gs/ru/";
-    const browser = await puppeteer.launch({
+    const browser = await chromium.puppeteer.launch({
       args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox"],
       executablePath: await chromium.executablePath,
     });
