@@ -1,4 +1,10 @@
-const { Client, GatewayIntentBits } = require("discord.js");
+const {
+  Client,
+  GatewayIntentBits,
+  MessageEmbed,
+  bold,
+  inlineCode,
+} = require("discord.js");
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
@@ -40,7 +46,7 @@ async function check(req, res) {
     const $ = cheerio.load(response.data);
 
     // Ваши операции по парсингу здесь
-    const title = $("title").text();
+    const title = $("#time").text();
 
     res.status(200).json({ title }).end();
   } catch (e) {
