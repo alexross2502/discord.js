@@ -12,6 +12,10 @@ const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
+exports.handler = async (event, context) => {
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  });
 
 async function doSomething(firstText, secondText) {
   await client.login(process.env.BOT_TOKEN);
