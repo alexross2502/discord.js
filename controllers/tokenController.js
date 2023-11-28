@@ -48,12 +48,12 @@ async function doSomething(firstText, secondText) {
 async function check(req, res) {
   try {
     (async () => {
-      const browser = await playwright.chromium.launch({
-        args: chromium.args,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-      });
-
+      // const browser = await playwright.chromium.launch({
+      //   args: chromium.args,
+      //   executablePath: await chromium.executablePath,
+      //   headless: chromium.headless,
+      // });
+      const browser = await puppeteer.launch();
       const url = "https://mu.bless.gs/ru/";
 
       const page = await browser.newPage();
