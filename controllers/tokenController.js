@@ -12,10 +12,10 @@ const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
-exports.handler = async (event, context) => {
-  const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
+// exports.handler = async (event, context) => {
+//   const browser = await puppeteer.launch({
+//     args: ['--no-sandbox', '--disable-setuid-sandbox'],
+//   });
 
 async function doSomething(firstText, secondText) {
   await client.login(process.env.BOT_TOKEN);
@@ -45,48 +45,68 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
-    const url = "https://mu.bless.gs/ru/";
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "domcontentloaded" });
+    const chromium = require("chrome-aws-lambda");
 
-    // Подождем 5 секунд (или другое нужное время)
-    //await page.waitForTimeout(5000);
+    exports.handler = async (event, context, callback) => {
+      let result = null;
+      let browser = null;
 
-    // Теперь, перед ожиданием селектора, остановим выполнение на несколько секунд
-    await page.evaluate(() => {
-      return new Promise((resolve) => {
-        // Останавливаем выполнение на 3 секунды (можно изменить)
-        setTimeout(() => {
-          resolve();
-        }, 3000);
-      });
-    });
+      try {
+        browser = await chromium.puppeteer.launch({
+          args: chromium.args,
+          defaultViewport: chromium.defaultViewport,
+          executablePath: await chromium.executablePath,
+          headless: chromium.headless,
+          ignoreHTTPSErrors: true,
+        });
 
-    // Теперь дождемся появления элемента #ivents
-    //await page.waitForSelector("#ivents");
+        let page = await browser.newPage();
 
-    // Затем получим данные
-    const eventsContent = await page.evaluate(() => {
-      let content = [];
-      document.querySelectorAll(".event").forEach((element) => {
-        content.push(element.textContent.trim());
-      });
-      return content;
-    });
+        await page.goto(event.url || "https://mu.bless.gs/ru/");
 
-    //console.log(await eventsContent);
+        result = await page.title();
+      } catch (error) {
+        return callback(error);
+      } finally {
+        if (browser !== null) {
+          await browser.close();
+        }
+      }
 
-    const timeNow = await page.$eval("#time", (element) =>
-      element.textContent.trim()
-    );
-    //console.log(await title);
+      return callback(null, result);
+    };
 
-    await browser.close();
-    await doSomething(eventsContent[1], eventsContent[2]);
-    await doSomething(eventsContent[3], eventsContent[4]);
-    await doSomething(eventsContent[5], eventsContent[6]);
-    res.status(200).json({ eventsContent }).end();
+    // const url = "https://mu.bless.gs/ru/";
+    // const browser = await puppeteer.launch();
+    // const page = await browser.newPage();
+    // await page.goto(url, { waitUntil: "domcontentloaded" });
+
+    // await page.evaluate(() => {
+    //   return new Promise((resolve) => {
+
+    //     setTimeout(() => {
+    //       resolve();
+    //     }, 3000);
+    //   });
+    // });
+
+    // const eventsContent = await page.evaluate(() => {
+    //   let content = [];
+    //   document.querySelectorAll(".event").forEach((element) => {
+    //     content.push(element.textContent.trim());
+    //   });
+    //   return content;
+    // });
+
+    // const timeNow = await page.$eval("#time", (element) =>
+    //   element.textContent.trim()
+    // );
+
+    // await browser.close();
+    // await doSomething(eventsContent[1], eventsContent[2]);
+    // await doSomething(eventsContent[3], eventsContent[4]);
+    // await doSomething(eventsContent[5], eventsContent[6]);
+    res.status(200).json("ok").end();
   } catch (e) {
     res.status(401).json({ message: e.message }).end();
   }
