@@ -11,7 +11,6 @@ const client = new Client({
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
-//const puppeteer = require("puppeteer");
 const puppeteer = require("puppeteer");
 const chromium = require("chrome-aws-lambda");
 
@@ -44,9 +43,9 @@ async function doSomething(firstText, secondText) {
 async function check(req, res) {
   try {
     const url = "https://mu.bless.gs/ru/";
-    const browser = await chromium.puppeteer.launch({
-      args: [...chromium.args, "--no-sandbox", "--disable-setuid-sandbox"],
-      executablePath: await chromium.executablePath,
+    const browser = await puppeteer.launch({
+      args: [/*...chromium.args,*/ "--no-sandbox", "--disable-setuid-sandbox"],
+      //executablePath: await chromium.executablePath,
     });
     const page = await browser.newPage();
     await page.goto(url, { waitUntil: "domcontentloaded" });
