@@ -13,6 +13,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
 const chromium = require("chrome-aws-lambda");
+const playwright = require("playwright-core");
 // exports.handler = async (event, context) => {
 //   const browser = await puppeteer.launch({
 //     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -46,6 +47,42 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
+    (async () => {
+      const browser = await playwright.chromium.launch({
+        args: chromium.args,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+      });
+
+      const url = "https://mu.bless.gs/ru/";
+
+      const page = await browser.newPage();
+      await page.goto(url, { waitUntil: "domcontentloaded" });
+      await page.evaluate(() => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            resolve();
+          }, 3000);
+        });
+      });
+      const eventsContent = await page.evaluate(() => {
+        let content = [];
+        document.querySelectorAll(".event").forEach((element) => {
+          content.push(element.textContent.trim());
+        });
+        return content;
+      });
+      const timeNow = await page.$eval("#time", (element) =>
+        element.textContent.trim()
+      );
+      console.log(await eventsContent);
+      await doSomething(eventsContent[1], eventsContent[2]);
+      await doSomething(eventsContent[3], eventsContent[4]);
+      await doSomething(eventsContent[5], eventsContent[6]);
+
+      await browser.close();
+    })();
+    /*
     exports.handler = async (event, context, callback) => {
       let result = null;
       let browser = null;
@@ -80,7 +117,7 @@ async function check(req, res) {
         const timeNow = await page.$eval("#time", (element) =>
           element.textContent.trim()
         );
-
+        console.log(await eventsContent);
         await doSomething(eventsContent[1], eventsContent[2]);
         await doSomething(eventsContent[3], eventsContent[4]);
         await doSomething(eventsContent[5], eventsContent[6]);
@@ -95,6 +132,7 @@ async function check(req, res) {
 
       return callback(null, result);
     };
+    */
 
     // const url = "https://mu.bless.gs/ru/";
     // const browser = await puppeteer.launch();
