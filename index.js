@@ -1,55 +1,59 @@
-const express = require("express");
-const app = express();
-const PORT = process.env.PORT || 3306;
-const cors = require("cors");
-const bot = require("./bot.js");
-const { Client, GatewayIntentBits } = require("discord.js");
+const {
+  Client,
+  GatewayIntentBits,
+  MessageEmbed,
+  bold,
+  inlineCode,
+} = require("discord.js");
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
-const mongoose = require("mongoose");
-const router = require("./routes");
-const dotenv = require("dotenv");
-dotenv.config();
-
-mongoose
-  .connect(
-    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}?retryWrites=true&w=majority`
-  )
-  .then(() => console.log("connected to db"))
-  .catch((err) => console.log(`db connection error: ${err}`));
-
-const corsOptions = {
-  origin: "*",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ["Content-Type", "Authorization"],
+const keepAlive = require("./server.js");
+//////////////////////////////////////////////////////
+let ivents = {
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
 };
-
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use("/api", router);
-
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "working" });
-});
-
-const start = async () => {
-  try {
-    app.listen(PORT, () => console.log("start", PORT));
-    check();
-  } catch (e) {
-    console.log(e);
-  }
+let ivents2 = {
+  "1.22.43": { firstText: "Devil Square", secondText: "старт - 00:011" },
+  "1.22.44": { firstText: "Devil Square", secondText: "старт - 00:012" },
+  "1.22.46": { firstText: "Devil Square", secondText: "старт - 00:013" },
 };
+////////////////////////////////////////////////////
 
-async function check() {
+async function check(firstText, secondText) {
   try {
     console.log(process.env.BOT_TOKEN);
     await client.login(process.env.BOT_TOKEN);
 
-    async function doSomething() {
+    async function doSomething(firstText, secondText) {
       const serverID = "1177898865773531156";
       const server = await client.guilds.cache.get(serverID);
       if (server) {
@@ -60,8 +64,9 @@ async function check() {
               (channel) => channel.name === "test"
             );
             if (targetChannel) {
+              firstText = bold(firstText);
               await targetChannel.send(
-                "Привет! Я бот и я только что присоединился к серверу!"
+                `${firstText} ${" " + ":" + " " + secondText}`
               );
             } else {
               console.error("Не удалось найти текстовый канал.");
@@ -74,20 +79,33 @@ async function check() {
         console.error(`Сервер с ID ${serverID} не найден.`);
       }
     }
-    function scheduleTask(hour, minute, callback) {
-      // ... ваша функция
+    ////////////////////////////////////////////////
+    function timeChecker(dayOfWeek, hours, minutes) {
+      const now = new Date();
+      const currentDayOfWeek = now.getUTCDay(); // Воскресенье - 0, Понедельник - 1, ..., Суббота - 6
+      const currentHours = +now.getUTCHours() + 2;
+      const currentMinutes = now.getUTCMinutes();
+      const currentDate = `${currentDayOfWeek}.${currentHours}.${currentMinutes}`;
+      if (ivents.currentDate) {
+        doSomething(
+          ivents2.currentDate.firstText,
+          ivents2.currentDate.secondText
+        );
+      }
+      console.log(currentDate);
     }
-    // Пример использования:
-    setInterval(async () => {
-      await doSomething();
-    }, 2000);
-    scheduleTask(3, 20, () => {
-      doSomething();
-    });
-    scheduleTask(3, 21, () => {
-      doSomething();
-    });
+    await doSomething("dsadsa", "ttttt");
+    //console.log(ivents2.hasOwnProperty('1.22.36'))
+    //console.log(ivents2['1.22.36'])
+
+    //////////////////////////////////////////////////////
+    // scheduleTask(17, 04, async () => {
+    //  await doSomething('eee', '213')
+    // });
+    //scheduleTask(3, 21, async () => {
+    // await doSomething();
+    //});
   } catch (e) {}
 }
-
-start();
+keepAlive();
+check();
