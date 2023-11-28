@@ -12,12 +12,6 @@ const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
-const chromium = require("chrome-aws-lambda");
-const playwright = require("playwright-core");
-// exports.handler = async (event, context) => {
-//   const browser = await puppeteer.launch({
-//     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-//   });
 
 async function doSomething(firstText, secondText) {
   await client.login(process.env.BOT_TOKEN);
@@ -47,124 +41,48 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
-    (async () => {
-      // const browser = await playwright.chromium.launch({
-      //   args: chromium.args,
-      //   executablePath: await chromium.executablePath,
-      //   headless: chromium.headless,
-      // });
-      const browser = await puppeteer.launch();
-      const url = "https://mu.bless.gs/ru/";
+    const url = "https://mu.bless.gs/ru/";
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: "domcontentloaded" });
 
-      const page = await browser.newPage();
-      await page.goto(url, { waitUntil: "domcontentloaded" });
-      await page.evaluate(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve();
-          }, 3000);
-        });
+    // Подождем 5 секунд (или другое нужное время)
+    //await page.waitForTimeout(5000);
+
+    // Теперь, перед ожиданием селектора, остановим выполнение на несколько секунд
+    await page.evaluate(() => {
+      return new Promise((resolve) => {
+        // Останавливаем выполнение на 3 секунды (можно изменить)
+        setTimeout(() => {
+          resolve();
+        }, 3000);
       });
-      const eventsContent = await page.evaluate(() => {
-        let content = [];
-        document.querySelectorAll(".event").forEach((element) => {
-          content.push(element.textContent.trim());
-        });
-        return content;
+    });
+
+    // Теперь дождемся появления элемента #ivents
+    //await page.waitForSelector("#ivents");
+
+    // Затем получим данные
+    const eventsContent = await page.evaluate(() => {
+      let content = [];
+      document.querySelectorAll(".event").forEach((element) => {
+        content.push(element.textContent.trim());
       });
-      const timeNow = await page.$eval("#time", (element) =>
-        element.textContent.trim()
-      );
-      console.log(await eventsContent);
-      await doSomething(eventsContent[1], eventsContent[2]);
-      await doSomething(eventsContent[3], eventsContent[4]);
-      await doSomething(eventsContent[5], eventsContent[6]);
+      return content;
+    });
 
-      await browser.close();
-    })();
-    /*
-    exports.handler = async (event, context, callback) => {
-      let result = null;
-      let browser = null;
+    //console.log(await eventsContent);
 
-      try {
-        browser = await chromium.puppeteer.launch({
-          args: chromium.args,
-          defaultViewport: chromium.defaultViewport,
-          executablePath: await chromium.executablePath,
-          headless: chromium.headless,
-          ignoreHTTPSErrors: true,
-        });
+    const timeNow = await page.$eval("#time", (element) =>
+      element.textContent.trim()
+    );
+    //console.log(await title);
 
-        const url = "https://mu.bless.gs/ru/";
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url, { waitUntil: "domcontentloaded" });
-        await page.evaluate(() => {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-            }, 3000);
-          });
-        });
-        const eventsContent = await page.evaluate(() => {
-          let content = [];
-          document.querySelectorAll(".event").forEach((element) => {
-            content.push(element.textContent.trim());
-          });
-          return content;
-        });
-        const timeNow = await page.$eval("#time", (element) =>
-          element.textContent.trim()
-        );
-        console.log(await eventsContent);
-        await doSomething(eventsContent[1], eventsContent[2]);
-        await doSomething(eventsContent[3], eventsContent[4]);
-        await doSomething(eventsContent[5], eventsContent[6]);
-        //result = await page.title();
-      } catch (error) {
-        return callback(error);
-      } finally {
-        if (browser !== null) {
-          await browser.close();
-        }
-      }
-
-      return callback(null, result);
-    };
-    */
-
-    // const url = "https://mu.bless.gs/ru/";
-    // const browser = await puppeteer.launch();
-    // const page = await browser.newPage();
-    // await page.goto(url, { waitUntil: "domcontentloaded" });
-
-    // await page.evaluate(() => {
-    //   return new Promise((resolve) => {
-
-    //     setTimeout(() => {
-    //       resolve();
-    //     }, 3000);
-    //   });
-    // });
-
-    // const eventsContent = await page.evaluate(() => {
-    //   let content = [];
-    //   document.querySelectorAll(".event").forEach((element) => {
-    //     content.push(element.textContent.trim());
-    //   });
-    //   return content;
-    // });
-
-    // const timeNow = await page.$eval("#time", (element) =>
-    //   element.textContent.trim()
-    // );
-
-    // await browser.close();
-    // await doSomething(eventsContent[1], eventsContent[2]);
-    // await doSomething(eventsContent[3], eventsContent[4]);
-    // await doSomething(eventsContent[5], eventsContent[6]);
-    res.status(200).json("ok").end();
+    await browser.close();
+    await doSomething(eventsContent[1], eventsContent[2]);
+    await doSomething(eventsContent[3], eventsContent[4]);
+    await doSomething(eventsContent[5], eventsContent[6]);
+    res.status(200).json({ eventsContent }).end();
   } catch (e) {
     res.status(401).json({ message: e.message }).end();
   }
