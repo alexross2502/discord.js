@@ -63,7 +63,21 @@ async function check(req, res) {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto(url, { waitUntil: "domcontentloaded" });
-        result = await page.title();
+        await page.evaluate(() => {
+          return new Promise((resolve) => {
+            setTimeout(() => {
+              resolve();
+            }, 3000);
+          });
+        });
+        const timeNow = await page.$eval("#time", (element) =>
+          element.textContent.trim()
+        );
+
+        await doSomething(eventsContent[1], eventsContent[2]);
+        await doSomething(eventsContent[3], eventsContent[4]);
+        await doSomething(eventsContent[5], eventsContent[6]);
+        //result = await page.title();
       } catch (error) {
         return callback(error);
       } finally {
