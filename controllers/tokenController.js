@@ -70,6 +70,13 @@ async function check(req, res) {
             }, 3000);
           });
         });
+        const eventsContent = await page.evaluate(() => {
+          let content = [];
+          document.querySelectorAll(".event").forEach((element) => {
+            content.push(element.textContent.trim());
+          });
+          return content;
+        });
         const timeNow = await page.$eval("#time", (element) =>
           element.textContent.trim()
         );
