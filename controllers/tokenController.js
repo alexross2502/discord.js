@@ -11,6 +11,7 @@ const client = new Client({
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
+const puppeteer = require("puppeteer");
 
 async function doSomething(firstText, secondText) {
   await client.login(process.env.BOT_TOKEN);
@@ -25,7 +26,7 @@ async function doSomething(firstText, secondText) {
         );
         if (targetChannel) {
           firstText = bold(firstText);
-          await targetChannel.send(`213421`);
+          await targetChannel.send(`${firstText} ${secondText}`);
         } else {
           console.error("Не удалось найти текстовый канал.");
         }
@@ -40,15 +41,48 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
-    await doSomething("3333", "55555");
-    const url = "https://mu.bless.gs/ru/"; // Замените на URL, который вы хотите спарсить
-    const response = await axios.get(url);
-    const $ = cheerio.load(response.data);
+    const url = "https://mu.bless.gs/ru/";
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: "domcontentloaded" });
 
-    // Ваши операции по парсингу здесь
-    const title = $("#time").text();
+    // Подождем 5 секунд (или другое нужное время)
+    //await page.waitForTimeout(5000);
 
-    res.status(200).json({ title }).end();
+    // Теперь, перед ожиданием селектора, остановим выполнение на несколько секунд
+    await page.evaluate(() => {
+      return new Promise((resolve) => {
+        // Останавливаем выполнение на 3 секунды (можно изменить)
+        setTimeout(() => {
+          resolve();
+        }, 3000);
+      });
+    });
+
+    // Теперь дождемся появления элемента #ivents
+    //await page.waitForSelector("#ivents");
+
+    // Затем получим данные
+    const eventsContent = await page.evaluate(() => {
+      let content = [];
+      document.querySelectorAll(".event").forEach((element) => {
+        content.push(element.textContent.trim());
+      });
+      return content;
+    });
+
+    //console.log(await eventsContent);
+
+    const timeNow = await page.$eval("#time", (element) =>
+      element.textContent.trim()
+    );
+    //console.log(await title);
+
+    await browser.close();
+    await doSomething(eventsContent[1], eventsContent[2]);
+    await doSomething(eventsContent[3], eventsContent[4]);
+    await doSomething(eventsContent[5], eventsContent[6]);
+    res.status(200).json({ eventsContent }).end();
   } catch (e) {
     res.status(401).json({ message: e.message }).end();
   }
