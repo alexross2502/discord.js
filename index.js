@@ -1,3 +1,9 @@
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 3306;
+const cors = require("cors");
+const dotenv = require("dotenv");
+const router = require("./routes");
 const {
   Client,
   GatewayIntentBits,
@@ -8,104 +14,57 @@ const {
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
-const keepAlive = require("./server.js");
-//////////////////////////////////////////////////////
-let ivents = {
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
-  "1.0.0": { firstText: "Devil Square", secondText: "старт - 00:01" },
+dotenv.config();
+const corsOptions = {
+  origin: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
-let ivents2 = {
-  "1.22.43": { firstText: "Devil Square", secondText: "старт - 00:011" },
-  "1.22.44": { firstText: "Devil Square", secondText: "старт - 00:012" },
-  "1.22.46": { firstText: "Devil Square", secondText: "старт - 00:013" },
-};
-////////////////////////////////////////////////////
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use("/api", router);
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "working" });
+});
+///////////////////////////////////////////////
 
-async function check(firstText, secondText) {
-  try {
-    console.log(process.env.BOT_TOKEN);
-    await client.login(process.env.BOT_TOKEN);
-
-    async function doSomething(firstText, secondText) {
-      const serverID = "1177898865773531156";
-      const server = await client.guilds.cache.get(serverID);
-      if (server) {
-        server.channels
-          .fetch()
-          .then(async (channels) => {
-            const targetChannel = await channels.find(
-              (channel) => channel.name === "test"
-            );
-            if (targetChannel) {
-              firstText = bold(firstText);
-              await targetChannel.send(
-                `${firstText} ${" " + ":" + " " + secondText}`
-              );
-            } else {
-              console.error("Не удалось найти текстовый канал.");
-            }
-          })
-          .catch((error) => {
-            console.error("Ошибка при получении каналов сервера:", error);
-          });
-      } else {
-        console.error(`Сервер с ID ${serverID} не найден.`);
-      }
-    }
-    ////////////////////////////////////////////////
-    function timeChecker(dayOfWeek, hours, minutes) {
-      const now = new Date();
-      const currentDayOfWeek = now.getUTCDay(); // Воскресенье - 0, Понедельник - 1, ..., Суббота - 6
-      const currentHours = +now.getUTCHours() + 2;
-      const currentMinutes = now.getUTCMinutes();
-      const currentDate = `${currentDayOfWeek}.${currentHours}.${currentMinutes}`;
-      if (ivents.currentDate) {
-        doSomething(
-          ivents2.currentDate.firstText,
-          ivents2.currentDate.secondText
+async function doSomething(firstText, secondText) {
+  await client.login(process.env.BOT_TOKEN);
+  const serverID = "1177898865773531156";
+  const server = await client.guilds.cache.get(serverID);
+  if (server) {
+    server.channels
+      .fetch()
+      .then(async (channels) => {
+        const targetChannel = await channels.find(
+          (channel) => channel.name === "test"
         );
-      }
-      console.log(currentDate);
-    }
-    await doSomething("dsadsa", "ttttt");
-    //console.log(ivents2.hasOwnProperty('1.22.36'))
-    //console.log(ivents2['1.22.36'])
-
-    //////////////////////////////////////////////////////
-    // scheduleTask(17, 04, async () => {
-    //  await doSomething('eee', '213')
-    // });
-    //scheduleTask(3, 21, async () => {
-    // await doSomething();
-    //});
-  } catch (e) {}
+        if (targetChannel) {
+          firstText = bold(firstText);
+          await targetChannel.send(`213421`);
+        } else {
+          console.error("Не удалось найти текстовый канал.");
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при получении каналов сервера:", error);
+      });
+  } else {
+    console.error(`Сервер с ID ${serverID} не найден.`);
+  }
 }
-keepAlive();
-check();
+
+///////////////////////////
+
+const start = async () => {
+  try {
+    app.listen(PORT, () => console.log("start", PORT));
+    await doSomething("dsadsadas", "234124");
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+start();
