@@ -12,6 +12,7 @@ const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const puppeteer = require("puppeteer");
+const chromium = require("chrome-aws-lambda");
 // exports.handler = async (event, context) => {
 //   const browser = await puppeteer.launch({
 //     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -45,8 +46,6 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
-    const chromium = require("chrome-aws-lambda");
-
     exports.handler = async (event, context, callback) => {
       let result = null;
       let browser = null;
@@ -60,10 +59,10 @@ async function check(req, res) {
           ignoreHTTPSErrors: true,
         });
 
-        let page = await browser.newPage();
-
-        await page.goto(event.url || "https://mu.bless.gs/ru/");
-
+        const url = "https://mu.bless.gs/ru/";
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(url, { waitUntil: "domcontentloaded" });
         result = await page.title();
       } catch (error) {
         return callback(error);
