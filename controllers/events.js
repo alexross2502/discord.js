@@ -286,7 +286,7 @@ let events = {
     start: "13:01",
     interval: "2:00",
   },
-  "1.13.03": {
+  "1.13.3": {
     event: "King of the Ring",
     open: "13:08",
     time: "13:08",
@@ -356,7 +356,7 @@ let events = {
     start: "15:01",
     interval: "2:00",
   },
-  "1.15.03": {
+  "1.15.3": {
     event: "King of the Ring",
     open: "15:08",
     time: "15:08",
@@ -405,7 +405,7 @@ let events = {
     start: "17:01",
     interval: "2:00",
   },
-  "1.17.03": {
+  "1.17.3": {
     event: "King of the Ring",
     open: "17:08",
     time: "17:08",
@@ -475,7 +475,7 @@ let events = {
     start: "19:00",
     interval: "24",
   },
-  "1.19.03": {
+  "1.19.3": {
     event: "King of the Ring",
     open: "19:08",
     time: "19:08",
@@ -545,7 +545,7 @@ let events = {
     start: "21:01",
     interval: "2:00",
   },
-  "1.21.03": {
+  "1.21.3": {
     event: "King of the Ring",
     open: "21:08",
     time: "21:08",
@@ -594,7 +594,7 @@ let events = {
     start: "23:01",
     interval: "2:00",
   },
-  "1.23.03": {
+  "1.23.3": {
     event: "King of the Ring",
     open: "23:08",
     time: "23:08",
