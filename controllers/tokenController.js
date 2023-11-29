@@ -9,14 +9,14 @@ async function check(req, res) {
     await client.login(process.env.BOT_TOKEN);
 
     async function doSomething(firstText, secondText) {
-      const serverID = "1177898865773531156";
+      const serverID = "463613958927155203";
       const server = await client.guilds.cache.get(serverID);
       if (server) {
         server.channels
           .fetch()
           .then(async (channels) => {
             const targetChannel = await channels.find(
-              (channel) => channel.name === "test"
+              (channel) => channel.name === "бот"
             );
             if (targetChannel) {
               firstText = bold(firstText);
@@ -51,7 +51,7 @@ async function check(req, res) {
           let delta = eventTime - currentTime;
           let eventDetails = events[key];
 
-          if (delta >= 0 && delta <= 50) {
+          if (delta >= -5 && delta <= 5) {
             let firstText = eventDetails.event;
             let open =
               eventDetails.open.split(":")[0] * 60 +
@@ -61,7 +61,7 @@ async function check(req, res) {
               eventDetails.start.split(":")[0] * 60 +
               +eventDetails.start.split(":")[1];
             let startDelta = start - currentTime;
-            let secondText = `Открытие через ${openDelta} минут, Старт через ${startDelta} минут`;
+            let secondText = `Открытие через ${openDelta} минут, старт через ${startDelta} минут`;
             await doSomething(firstText, secondText);
           }
         }
