@@ -1,23 +1,10 @@
-const {
-  Client,
-  GatewayIntentBits,
-  MessageEmbed,
-  bold,
-  inlineCode,
-} = require("discord.js");
+const { Client, GatewayIntentBits, bold } = require("discord.js");
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const puppeteer = require("puppeteer");
-const chromium = require("chrome-aws-lambda");
-const playwright = require("playwright-core");
-// exports.handler = async (event, context) => {
-//   const browser = await puppeteer.launch({
-//     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-//   });
 
 async function doSomething(firstText, secondText) {
   await client.login(process.env.BOT_TOKEN);
@@ -32,7 +19,7 @@ async function doSomething(firstText, secondText) {
         );
         if (targetChannel) {
           firstText = bold(firstText);
-          await targetChannel.send(`${firstText} ${secondText}`);
+          await targetChannel.send(`213421`);
         } else {
           console.error("Не удалось найти текстовый канал.");
         }
@@ -47,124 +34,15 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
-    //(async () => {
-    const browser = await playwright.chromium.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
-    });
+    await doSomething("3333", "55555");
+    const url = "https://mu.bless.gs/ru/"; // Замените на URL, который вы хотите спарсить
+    const response = await axios.get(url);
+    const $ = cheerio.load(response.data);
 
-    const url = "https://mu.bless.gs/ru/";
+    // Ваши операции по парсингу здесь
+    const title = $("title").text();
 
-    const page = await browser.newPage();
-    await page.goto(url, { waitUntil: "domcontentloaded" });
-    await page.evaluate(() => {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve();
-        }, 3000);
-      });
-    });
-    const eventsContent = await page.evaluate(() => {
-      let content = [];
-      document.querySelectorAll(".event").forEach((element) => {
-        content.push(element.textContent.trim());
-      });
-      return content;
-    });
-    const timeNow = await page.$eval("#time", (element) =>
-      element.textContent.trim()
-    );
-    console.log(await eventsContent);
-    await doSomething(eventsContent[1], eventsContent[2]);
-    await doSomething(eventsContent[3], eventsContent[4]);
-    await doSomething(eventsContent[5], eventsContent[6]);
-
-    await browser.close();
-    // })();
-    /*
-    exports.handler = async (event, context, callback) => {
-      let result = null;
-      let browser = null;
-
-      try {
-        browser = await chromium.puppeteer.launch({
-          args: chromium.args,
-          defaultViewport: chromium.defaultViewport,
-          executablePath: await chromium.executablePath,
-          headless: chromium.headless,
-          ignoreHTTPSErrors: true,
-        });
-
-        const url = "https://mu.bless.gs/ru/";
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto(url, { waitUntil: "domcontentloaded" });
-        await page.evaluate(() => {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-            }, 3000);
-          });
-        });
-        const eventsContent = await page.evaluate(() => {
-          let content = [];
-          document.querySelectorAll(".event").forEach((element) => {
-            content.push(element.textContent.trim());
-          });
-          return content;
-        });
-        const timeNow = await page.$eval("#time", (element) =>
-          element.textContent.trim()
-        );
-        console.log(await eventsContent);
-        await doSomething(eventsContent[1], eventsContent[2]);
-        await doSomething(eventsContent[3], eventsContent[4]);
-        await doSomething(eventsContent[5], eventsContent[6]);
-        //result = await page.title();
-      } catch (error) {
-        return callback(error);
-      } finally {
-        if (browser !== null) {
-          await browser.close();
-        }
-      }
-
-      return callback(null, result);
-    };
-    */
-
-    // const url = "https://mu.bless.gs/ru/";
-    // const browser = await puppeteer.launch();
-    // const page = await browser.newPage();
-    // await page.goto(url, { waitUntil: "domcontentloaded" });
-
-    // await page.evaluate(() => {
-    //   return new Promise((resolve) => {
-
-    //     setTimeout(() => {
-    //       resolve();
-    //     }, 3000);
-    //   });
-    // });
-
-    // const eventsContent = await page.evaluate(() => {
-    //   let content = [];
-    //   document.querySelectorAll(".event").forEach((element) => {
-    //     content.push(element.textContent.trim());
-    //   });
-    //   return content;
-    // });
-
-    // const timeNow = await page.$eval("#time", (element) =>
-    //   element.textContent.trim()
-    // );
-
-    // await browser.close();
-    // await doSomething(eventsContent[1], eventsContent[2]);
-    // await doSomething(eventsContent[3], eventsContent[4]);
-    // await doSomething(eventsContent[5], eventsContent[6]);
-    res.status(200).json("ok").end();
+    res.status(200).json({ title }).end();
   } catch (e) {
     res.status(401).json({ message: e.message }).end();
   }
