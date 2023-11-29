@@ -8,7 +8,7 @@ async function check(req, res) {
     console.log(process.env.BOT_TOKEN);
     await client.login(process.env.BOT_TOKEN);
 
-    async function doSomething() {
+    async function doSomething(firstText, secondText) {
       const serverID = "1177898865773531156";
       const server = await client.guilds.cache.get(serverID);
       if (server) {
@@ -20,7 +20,7 @@ async function check(req, res) {
             );
             if (targetChannel) {
               await targetChannel.send(
-                "Привет! Я бот и я только что присоединился к серверу!"
+                "Привет! Я бот и я только что присоединился к серверу!"`${firstText}`
               );
             } else {
               console.error("Не удалось найти текстовый канал.");
@@ -34,7 +34,13 @@ async function check(req, res) {
       }
     }
 
-    doSomething();
+    await doSomething("111");
+    setTimeout(async () => {
+      await doSomething("222");
+    }, 2000 * 60);
+    setTimeout(async () => {
+      await doSomething("333");
+    }, 4000 * 60);
 
     res.status(200).json("ok").end();
   } catch (e) {
