@@ -19,9 +19,7 @@ async function check(req, res) {
               (channel) => channel.name === "test"
             );
             if (targetChannel) {
-              await targetChannel.send(
-                "Привет! Я бот и я только что присоединился к серверу!"`${firstText}`
-              );
+              await targetChannel.send(`${firstText}`);
             } else {
               console.error("Не удалось найти текстовый канал.");
             }
@@ -36,10 +34,10 @@ async function check(req, res) {
 
     await doSomething("111");
     setTimeout(async () => {
-      await doSomething("222");
+      await doSomething("444");
     }, 2000 * 60);
     setTimeout(async () => {
-      await doSomething("333");
+      await doSomething("555");
     }, 4000 * 60);
 
     res.status(200).json("ok").end();
