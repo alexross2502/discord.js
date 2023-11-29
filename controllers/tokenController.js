@@ -9,14 +9,14 @@ async function check(req, res) {
     await client.login(process.env.BOT_TOKEN);
 
     async function doSomething(firstText, secondText) {
-      const serverID = "1177898865773531156";
+      const serverID = "463613958927155203";
       const server = await client.guilds.cache.get(serverID);
       if (server) {
         server.channels
           .fetch()
           .then(async (channels) => {
             const targetChannel = await channels.find(
-              (channel) => channel.name === "test"
+              (channel) => channel.name === "бот"
             );
             if (targetChannel) {
               firstText = bold(firstText);

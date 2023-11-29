@@ -58,9 +58,6 @@ async function doSomething(firstText, secondText) {
 const start = async () => {
   try {
     app.listen(PORT, () => console.log("start", PORT));
-    setInterval(async () => {
-      await doSomething("sdadssa", "dasdsads");
-    }, 1000 * 60);
   } catch (e) {
     console.log(e);
   }
