@@ -47,41 +47,41 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
-    (async () => {
-      const browser = await playwright.chromium.launch({
-        args: chromium.args,
-        executablePath: await chromium.executablePath,
-        headless: chromium.headless,
-      });
+    //(async () => {
+    const browser = await playwright.chromium.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
+    });
 
-      const url = "https://mu.bless.gs/ru/";
+    const url = "https://mu.bless.gs/ru/";
 
-      const page = await browser.newPage();
-      await page.goto(url, { waitUntil: "domcontentloaded" });
-      await page.evaluate(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve();
-          }, 3000);
-        });
+    const page = await browser.newPage();
+    await page.goto(url, { waitUntil: "domcontentloaded" });
+    await page.evaluate(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 3000);
       });
-      const eventsContent = await page.evaluate(() => {
-        let content = [];
-        document.querySelectorAll(".event").forEach((element) => {
-          content.push(element.textContent.trim());
-        });
-        return content;
+    });
+    const eventsContent = await page.evaluate(() => {
+      let content = [];
+      document.querySelectorAll(".event").forEach((element) => {
+        content.push(element.textContent.trim());
       });
-      const timeNow = await page.$eval("#time", (element) =>
-        element.textContent.trim()
-      );
-      console.log(await eventsContent);
-      await doSomething(eventsContent[1], eventsContent[2]);
-      await doSomething(eventsContent[3], eventsContent[4]);
-      await doSomething(eventsContent[5], eventsContent[6]);
+      return content;
+    });
+    const timeNow = await page.$eval("#time", (element) =>
+      element.textContent.trim()
+    );
+    console.log(await eventsContent);
+    await doSomething(eventsContent[1], eventsContent[2]);
+    await doSomething(eventsContent[3], eventsContent[4]);
+    await doSomething(eventsContent[5], eventsContent[6]);
 
-      await browser.close();
-    })();
+    await browser.close();
+    // })();
     /*
     exports.handler = async (event, context, callback) => {
       let result = null;
