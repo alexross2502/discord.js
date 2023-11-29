@@ -4,24 +4,6 @@ const client = new Client({
 });
 const express = require("express");
 const axios = require("axios");
-const cheerio = require("cheerio");
-
-const { chromium } = require("playwright");
-
-async function run() {
-  const browser = await chromium.launch();
-  const context = await browser.newContext();
-  const page = await context.newPage();
-
-  await page.goto("https://mu.bless.gs/ru/");
-
-  // Выполнение скрипта на странице
-  const title = await page.title();
-  console.log("Title:", title);
-
-  // Закрытие браузера
-  await browser.close();
-}
 
 async function doSomething(firstText, secondText) {
   await client.login(process.env.BOT_TOKEN);
@@ -51,17 +33,11 @@ async function doSomething(firstText, secondText) {
 
 async function check(req, res) {
   try {
-    run();
-    //await doSomething("3333", "55555");
-    const url = "https://mu.bless.gs/ru/"; // Замените на URL, который вы хотите спарсить
-    const response = await axios.get(url);
+    let interval = setInterval(async () => {
+      await doSomething("3333", "55555");
+    }, 1000 * 60);
 
-    const $ = cheerio.load(response.data);
-
-    // Ваши операции по парсингу здесь
-    const title = $(".event");
-
-    res.status(200).json({ title }).end();
+    res.status(200).json("ok").end();
   } catch (e) {
     res.status(401).json({ message: e.message }).end();
   }
