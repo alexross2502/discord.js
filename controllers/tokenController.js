@@ -51,7 +51,7 @@ async function check(req, res) {
           let delta = eventTime - currentTime;
           let eventDetails = events[key];
 
-          if (delta >= -2 && delta <= 2) {
+          if (delta >= -200 && delta <= 2) {
             let firstText = eventDetails.event;
             let open =
               eventDetails.open.split(":")[0] * 60 +
