@@ -35,21 +35,7 @@ async function checker() {}
 
 async function check(req, res) {
   try {
-    setTimeout(async () => {
-      await doSomething("1", "1");
-    }, 1000 * 60);
-    setTimeout(async () => {
-      await doSomething("2", "2");
-    }, 2000 * 60);
-    setTimeout(async () => {
-      await doSomething("3", "3");
-    }, 3000 * 60);
-    setTimeout(async () => {
-      await doSomething("4", "4");
-    }, 4000 * 60);
-    setTimeout(async () => {
-      await doSomething("5", "5");
-    }, 5000 * 60);
+    await doSomething("1", "1");
 
     res.status(200).json("ok").end();
   } catch (e) {
