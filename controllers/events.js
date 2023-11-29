@@ -447,7 +447,7 @@ let events = {
     start: "18:31",
     interval: "1:00",
   },
-  "1.18.40": {
+  "1.18.39": {
     event: "White Wizard",
     open: "18:45",
     time: "18:45",
