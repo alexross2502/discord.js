@@ -9,14 +9,14 @@ async function check(req, res) {
     await client.login(process.env.BOT_TOKEN);
 
     async function doSomething(firstText, secondText) {
-      const serverID = "463613958927155203";
+      const serverID = "1177898865773531156";
       const server = await client.guilds.cache.get(serverID);
       if (server) {
         server.channels
           .fetch()
           .then(async (channels) => {
             const targetChannel = await channels.find(
-              (channel) => channel.name === "бот"
+              (channel) => channel.name === "test"
             );
             if (targetChannel) {
               firstText = bold(firstText);
@@ -63,6 +63,8 @@ async function check(req, res) {
             let startDelta = start - currentTime;
             let secondText = `Открытие через ${openDelta} минут, старт через ${startDelta} минут`;
             await doSomething(firstText, secondText);
+            console.log(firstText, secondText);
+            //KD night: Открытие через 4 минут, старт через 5 минут
           }
         }
       }
