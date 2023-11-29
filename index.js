@@ -29,13 +29,38 @@ app.get("/", (req, res) => {
   res.status(200).json({ message: "working" });
 });
 ///////////////////////////////////////////////
-
+async function doSomething(firstText, secondText) {
+  const serverID = "1177898865773531156";
+  const server = await client.guilds.cache.get(serverID);
+  if (server) {
+    server.channels
+      .fetch()
+      .then(async (channels) => {
+        const targetChannel = await channels.find(
+          (channel) => channel.name === "test"
+        );
+        if (targetChannel) {
+          firstText = bold(firstText);
+          await targetChannel.send(`${firstText}: ${secondText}`);
+        } else {
+          console.error("Не удалось найти текстовый канал.");
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при получении каналов сервера:", error);
+      });
+  } else {
+    console.error(`Сервер с ID ${serverID} не найден.`);
+  }
+}
 ///////////////////////////
 
 const start = async () => {
   try {
     app.listen(PORT, () => console.log("start", PORT));
-    // await doSomething("dsadsadas", "234124");
+    setInterval(async () => {
+      await doSomething("sdadssa", "dasdsads");
+    }, 1000 * 60);
   } catch (e) {
     console.log(e);
   }
