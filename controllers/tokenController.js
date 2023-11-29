@@ -3,7 +3,7 @@ const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
-async function check() {
+async function check(req, res) {
   try {
     console.log(process.env.BOT_TOKEN);
     await client.login(process.env.BOT_TOKEN);
