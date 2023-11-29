@@ -1,4 +1,5 @@
 const { Client, GatewayIntentBits } = require("discord.js");
+const events = require("./events");
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
@@ -32,13 +33,22 @@ async function check(req, res) {
       }
     }
 
+    async function timeChecker(dayOfWeek, hours, minutes) {
+      const now = new Date();
+      const currentDayOfWeek = now.getUTCDay(); // Воскресенье - 0, Понедельник - 1, ..., Суббота - 6
+      const currentHours = +now.getUTCHours() + 2;
+      const currentMinutes = now.getUTCMinutes();
+      const currentDate = `${currentDayOfWeek}.${currentHours}.${currentMinutes}`;
+      if (events.currentDate) {
+        await doSomething(
+          events.currentDate.firstText,
+          events.currentDate.secondText
+        );
+      }
+      console.log(currentDate);
+    }
+
     await doSomething("111");
-    setTimeout(async () => {
-      await doSomething("444");
-    }, 2000 * 60);
-    setTimeout(async () => {
-      await doSomething("555");
-    }, 4000 * 60);
 
     res.status(200).json("ok").end();
   } catch (e) {
