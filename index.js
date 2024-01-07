@@ -61,7 +61,7 @@ client.on("messageCreate", async (message) => {
     });
     if (boss[0] == undefined) {
       message.channel.send(
-        `Босса с таким именем не найдено. Проверьте пробелы, большие/маленькие буквы`,
+        `Босса с таким именем не найдено. Проверьте пробелы, большие/маленькие буквы111`
       );
       return false;
     }
@@ -75,7 +75,7 @@ client.on("messageCreate", async (message) => {
       isNaN(bossKilledTime.split(":")[1])
     ) {
       message.channel.send(
-        `Неверный формат времени. Пример верного: 18:05, 1:15, 23:59, 0:23`,
+        `Неверный формат времени. Пример верного: 18:05, 1:15, 23:59, 0:23`
       );
       return false;
     }
@@ -100,7 +100,7 @@ async function doSomethingBoss(firstText, secondText) {
       .fetch()
       .then(async (channels) => {
         const targetChannel = await channels.find(
-          (channel) => channel.name === "бот",
+          (channel) => channel.name === "бот"
         );
         if (targetChannel) {
           firstText = bold(firstText);
@@ -126,7 +126,7 @@ async function doSomething(firstText, secondText) {
       .fetch()
       .then(async (channels) => {
         const targetChannel = await channels.find(
-          (channel) => channel.name === "бот",
+          (channel) => channel.name === "бот"
         );
         if (targetChannel) {
           firstText = bold(firstText);
@@ -169,7 +169,7 @@ async function timeChecker(dayOfWeek, hours, minutes) {
       await doSomethingBoss(el.name, "Появится через 10 минут");
       await Users.updateOne(
         { name: el.name },
-        { killedTime: null, nextRespawn: null },
+        { killedTime: null, nextRespawn: null }
       );
     }
   });
