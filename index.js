@@ -50,7 +50,7 @@ client.on("messageCreate", async (message) => {
   }
   /////////////Обновление
   if (message.content.startsWith(updatePrefix)) {
-    //message.channel.send('Hello, World!');
+    message.channel.send("Hello, World!");
     const messageData = message.content.slice(1);
     const lastSpaceIndex = messageData.lastIndexOf(" ");
     let bossName = messageData.slice(0, lastSpaceIndex);
