@@ -50,7 +50,6 @@ client.on("messageCreate", async (message) => {
   }
   /////////////Обновление
   if (message.content.startsWith(updatePrefix)) {
-    message.channel.send("Hello, World!");
     const messageData = message.content.slice(1);
     const lastSpaceIndex = messageData.lastIndexOf(" ");
     let bossName = messageData.slice(0, lastSpaceIndex);
@@ -103,6 +102,7 @@ async function doSomethingBoss(firstText, secondText) {
           (channel) => channel.name === "бот"
         );
         if (targetChannel) {
+          await targetChannel.send(`fsdfdsfsdfsdfsd`);
           firstText = bold(firstText);
           await targetChannel.send(`@everyone ${firstText}: ${secondText} `);
         } else {
