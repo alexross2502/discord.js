@@ -619,7 +619,7 @@ let events = {
     event: "Devil Square",
     open: "23:56",
     time: "0:00",
-    start: "0:01",
+    start: "23:59",
     interval: "2:00",
   },
 };

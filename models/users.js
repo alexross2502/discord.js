@@ -3,17 +3,22 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const usersSchema = new Schema({
-  login: {
+  name: {
     type: String,
     required: true,
     unique: true,
   },
-  password: {
+  respawnInterval: {
     type: String,
-    required: true,
+  },
+  killedTime: {
+    type: String,
+  },
+  nextRespawn: {
+    type: String,
   },
 });
 
-const Users = mongoose.model("Users", usersSchema);
+const Users = mongoose.model("Events", usersSchema);
 
 module.exports = Users;
