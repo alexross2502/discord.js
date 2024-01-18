@@ -1,8 +1,7 @@
 const TelegramBot = require("node-telegram-bot-api");
-
 const express = require("express");
 const app = express();
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 3000;
 const cors = require("cors");
 
 app.use(express.json());
@@ -18,6 +17,7 @@ const start = async () => {
         autoStart: true,
       },
     });
+
     bot.onText(/\/start/, async (msg) => {
       const userId = msg.chat.username;
       if (userId != undefined) {
@@ -29,12 +29,14 @@ const start = async () => {
         );
       }
     });
+
     bot.onText(/^(?!\/)/, (msg) => {
       bot.forwardMessage("484934360", msg.chat.id, msg.message_id);
     });
-    app.listen(PORT, () => console.log("start", PORT));
+
+    app.listen(PORT, () => console.log("Server started on port", PORT));
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 };
 
