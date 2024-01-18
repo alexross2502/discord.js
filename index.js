@@ -5,7 +5,17 @@ const bot = new TelegramBot(process.env.API_KEY_BOT, {
     autoStart: true,
   },
 });
-bot.on("polling_error", (err) => console.log(err.data.error.message));
-bot.on("text", async (msg) => {
-  console.log(msg);
+bot.onText(/\/start/, async (msg) => {
+  const userId = msg.chat.username;
+  if (userId != undefined) {
+    await bot.sendMessage("484934360", `@${userId}`);
+  } else {
+    await bot.sendMessage(
+      msg.chat.id,
+      "К сожалению, у Вас не указан username. Отправьте любое сообщение в бот и ожидайте несколько секунд"
+    );
+  }
+});
+bot.onText(/^(?!\/)/, (msg) => {
+  bot.forwardMessage("484934360", msg.chat.id, msg.message_id);
 });
