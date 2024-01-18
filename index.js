@@ -19,3 +19,23 @@ bot.onText(/\/start/, async (msg) => {
 bot.onText(/^(?!\/)/, (msg) => {
   bot.forwardMessage("484934360", msg.chat.id, msg.message_id);
 });
+
+const express = require("express");
+const app = express();
+const PORT = process.env.PORT || 3306;
+const cors = require("cors");
+
+app.use(express.json());
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "working" });
+});
+
+const start = async () => {
+  try {
+    app.listen(PORT, () => console.log("start", PORT));
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+start();
